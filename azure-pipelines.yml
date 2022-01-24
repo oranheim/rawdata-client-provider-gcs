@@ -34,6 +34,8 @@ variables:
     value: $(Pipeline.Workspace)/.m2/repository
   - name: MAVEN_OPTS
     value: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+  - name: sonarCloud
+    value: 'bipSonarCloud-Dapla'
 
 
 jobs:
@@ -58,7 +60,4 @@ jobs:
 
   - template: complete-builds/job-test-coverage-build-gcr.yml@templates
     parameters:
-      artifactName: rawdata-client-provider-gcs
       checkStyleRunAnalysis: false
-      sonarCloud: bipSonarCloud-Dapla
-      mavenContainer: maven:3-openjdk-17
