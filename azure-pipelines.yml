@@ -57,8 +57,8 @@ jobs:
         displayName: 'Setting GOOGLE_APPLICATION_CREDENTIALS env variable'
 
   - template: complete-builds/job-test-coverage-build-gcr.yml@templates
-      parameters:
-        artifactName: rawdata-client-provider-gcs
-        checkStyleRunAnalysis: false
-        sonarCloud: bipSonarCloud-Dapla
-        mavenContainer: maven:3-openjdk-17
+    parameters:
+      artifactName: rawdata-client-provider-gcs
+      checkStyleRunAnalysis: false
+      sonarCloud: bipSonarCloud-Dapla
+      mavenContainer: maven:3-openjdk-17
