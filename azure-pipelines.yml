@@ -34,30 +34,11 @@ variables:
     value: $(Pipeline.Workspace)/.m2/repository
   - name: MAVEN_OPTS
     value: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
-  - name: sonarCloud
-    value: 'bipSonarCloud-Dapla'
 
-
+# Job which runs mvn build, mvn install,
 jobs:
-  - job: buildTest
-    displayName: 'compile deploy app'
-    # Job condition: Run these jobs on any branch, but not on tags
-    condition: not(startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
-    # Steps in this Job
-    steps:
-      - task: DownloadSecureFile@1
-        name: gcrJsonKey
-        displayName: 'Download gcr creds'
-        inputs:
-          secureFile: 'gcr-key.json'
-
-      # Set env variable pointing to the file downloaded in previous task
-      # as a library in next task needs this env variable
-      - script: |
-          echo "Setting env variable GOOGLE_APPLICATION_CREDENTIALS"
-          echo "##vso[task.setvariable variable=GOOGLE_APPLICATION_CREDENTIALS]$(gcrJsonKey.secureFilePath)"
-        displayName: 'Setting GOOGLE_APPLICATION_CREDENTIALS env variable'
-
-  - template: complete-builds/job-test-coverage-build-gcr.yml@templates
+  - template: complete-builds/job-lib-test-gar.yml@templates
     parameters:
+      artifactName: rawdata-client-provider-gcs
       checkStyleRunAnalysis: false
+      sonarCloud: bipSonarCloud-Dapla
