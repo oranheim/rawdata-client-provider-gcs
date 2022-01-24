@@ -149,7 +149,7 @@ public abstract class AvroRawdataClient implements RawdataClient {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         if (closed.compareAndSet(false, true)) {
             for (AvroRawdataProducer producer : producers) {
                 producer.close();
