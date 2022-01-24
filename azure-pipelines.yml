@@ -37,7 +37,7 @@ variables:
 
 # Job which runs mvn build, mvn install,
 jobs:
-  - template: complete-builds/job-lib-test-gar.yml@templates
+  - template: complete-builds/job-test-gar.yml@templates
     parameters:
       artifactName: rawdata-client-provider-gcs
       checkStyleRunAnalysis: false
