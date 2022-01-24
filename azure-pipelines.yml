@@ -16,7 +16,7 @@ resources:
     - repository: templates
       type: github
       name: statisticsnorway/azure-pipelines-templates
-      ref: refs/tags/1.1.16
+      ref: refs/tags/1.1.29
       endpoint: statisticsnorway (6)
 
 # Pipeline will be run on this base image
@@ -37,6 +37,21 @@ variables:
 
 
 jobs:
-  - template: complete-builds/job-test-nexus.yml@templates
-    parameters:
-      checkStyleRunAnalysis: false
+  - job: buildTest
+    displayName: 'compile deploy app'
+    # Job condition: Run these jobs on any branch, but not on tags
+    condition: not(startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+    # Steps in this Job
+    steps:
+      - task: DownloadSecureFile@1
+        name: gcrJsonKey
+        displayName: 'Download gcr creds'
+        inputs:
+          secureFile: 'gcr-key.json'
+
+      # Set env variable pointing to the file downloaded in previous task
+      # as a library in next task needs this env variable
+      - script: |
+          echo "Setting env variable GOOGLE_APPLICATION_CREDENTIALS"
+          echo "##vso[task.setvariable variable=GOOGLE_APPLICATION_CREDENTIALS]$(gcrJsonKey.secureFilePath)"
+        displayName: 'Setting GOOGLE_APPLICATION_CREDENTIALS env variable'

@@ -15,6 +15,8 @@
     <properties>
         <java.version>11</java.version>
         <module.build.sourceEncoding>UTF-8</module.build.sourceEncoding>
+        <jacoco.version>0.8.7</jacoco.version>
+        <checkstyle.version>8.45.1</checkstyle.version>
     </properties>
 
     <licenses>
@@ -108,6 +110,38 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>artifact-registry</id>
+            <url>
+                artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-releases
+            </url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>artifact-registry-snapshot</id>
+            <url>
+                artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-snapshots
+            </url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+
     <profiles>
         <profile>
             <id>coverage</id>
@@ -117,16 +151,27 @@
                 </sonar.coverage.jacoco.xmlReportPaths>
             </properties>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-checkstyle-plugin</artifactId>
+                            <version>3.1.2</version>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>com.puppycrawl.tools</groupId>
+                                    <artifactId>checkstyle</artifactId>
+                                    <version>${checkstyle.version}</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
-                    <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.7.0.1746</version>
-                    </plugin>
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.6</version>
+                        <version>${jacoco.version}</version>
                         <executions>
                             <execution>
                                 <id>prepare-agent</id>
@@ -147,31 +192,28 @@
         </profile>
         <profile>
             <id>ssb-bip</id>
-            <repositories>
-                <repository>
-                    <id>ssb-bip-releases</id>
-                    <url>https://nexus.prod-bip-ci.ssb.no/repository/maven-public/</url>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
             <distributionManagement>
-                <repository>
-                    <id>ssb-bip-releases</id>
-                    <name>SSB Nexus Releases</name>
-                    <url>https://nexus.prod-bip-ci.ssb.no/repository/maven-releases/</url>
-                </repository>
                 <snapshotRepository>
-                    <id>ssb-bip-snapshots</id>
-                    <name>SSB Snapshot Repository</name>
-                    <url>https://nexus.prod-bip-ci.ssb.no/repository/maven-snapshots/</url>
+                    <id>artifact-registry</id>
+                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-snapshots</url>
                 </snapshotRepository>
+                <repository>
+                    <id>artifact-registry</id>
+                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-releases</url>
+                </repository>
             </distributionManagement>
         </profile>
     </profiles>
 
     <build>
+        <defaultGoal>clean install</defaultGoal>
+        <extensions>
+            <extension>
+                <groupId>com.google.cloud.artifactregistry</groupId>
+                <artifactId>artifactregistry-maven-wagon</artifactId>
+                <version>2.1.4</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
