@@ -46,7 +46,7 @@
         <dependency>
             <groupId>no.ssb.rawdata</groupId>
             <artifactId>rawdata-client-api</artifactId>
-            <version>0.29-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>no.ssb.spi</groupId>
@@ -102,14 +102,6 @@
     </dependencies>
 
     <build>
-        <defaultGoal>clean install</defaultGoal>
-        <extensions>
-            <extension>
-                <groupId>com.google.cloud.artifactregistry</groupId>
-                <artifactId>artifactregistry-maven-wagon</artifactId>
-                <version>2.1.4</version>
-            </extension>
-        </extensions>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -142,6 +134,13 @@
                 <version>2.19.1</version> <!-- Newer version do not yet work with Java 11 -->
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>com.google.cloud.artifactregistry</groupId>
+                <artifactId>artifactregistry-maven-wagon</artifactId>
+                <version>2.1.4</version>
+            </extension>
+        </extensions>
     </build>
 
     <repositories>
