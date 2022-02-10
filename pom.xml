@@ -4,7 +4,7 @@
 
     <groupId>no.ssb.rawdata</groupId>
     <artifactId>rawdata-client-provider-gcs</artifactId>
-    <version>0.16-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>GCS Rawdata Provider</name>
@@ -14,9 +14,9 @@
 
     <properties>
         <java.version>11</java.version>
-        <module.build.sourceEncoding>UTF-8</module.build.sourceEncoding>
-        <jacoco.version>0.8.7</jacoco.version>
-        <checkstyle.version>8.45.1</checkstyle.version>
+        <java.encoding>UTF-8</java.encoding>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <licenses>
@@ -38,18 +38,9 @@
 
     <scm>
         <connection>scm:git:git://github.com/statisticsnorway/rawdata-client-provider-gcs.git</connection>
-        <developerConnection>scm:git:git@github.com:statisticsnorway/rawdata-client-provider-gcs.git
-        </developerConnection>
+        <developerConnection>scm:git:git@github.com:statisticsnorway/rawdata-client-provider-gcs.git</developerConnection>
         <url>https://github.com/statisticsnorway/rawdata-client-provider-gcs/tree/master</url>
-        <tag>HEAD</tag>
     </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -110,101 +101,6 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>artifact-registry</id>
-            <url>
-                artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-releases
-            </url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>artifact-registry-snapshot</id>
-            <url>
-                artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-snapshots
-            </url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
-        </repository>
-    </repositories>
-
-    <profiles>
-        <profile>
-            <id>coverage</id>
-            <properties>
-                <sonar.coverage.jacoco.xmlReportPaths>
-                    target/site/jacoco/jacoco.xml
-                </sonar.coverage.jacoco.xmlReportPaths>
-            </properties>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-checkstyle-plugin</artifactId>
-                            <version>3.1.2</version>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>com.puppycrawl.tools</groupId>
-                                    <artifactId>checkstyle</artifactId>
-                                    <version>${checkstyle.version}</version>
-                                </dependency>
-                            </dependencies>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
-                        <executions>
-                            <execution>
-                                <id>prepare-agent</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report</id>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>ssb-bip</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>artifact-registry</id>
-                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-snapshots</url>
-                </snapshotRepository>
-                <repository>
-                    <id>artifact-registry</id>
-                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-releases</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
-
     <build>
         <defaultGoal>clean install</defaultGoal>
         <extensions>
@@ -247,5 +143,121 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>artifact-registry</id>
+            <url>
+                artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-releases
+            </url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>artifact-registry-snapshot</id>
+            <url>
+                artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-snapshots
+            </url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+
+    <profiles>
+        <profile>
+            <id>coverage</id>
+            <properties>
+                <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>3.9.1.2184</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.puppycrawl.tools</groupId>
+                                <artifactId>checkstyle</artifactId>
+                                <version>9.3</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.7</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>ssb-bip</id>
+            <repositories>
+                <repository>
+                    <id>artifact-registry</id>
+                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-releases</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>artifact-registry-snapshots</id>
+                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-snapshots</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>artifact-registry-snapshots</id>
+                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>artifact-registry</id>
+                    <url>artifactregistry://europe-north1-maven.pkg.dev/artifact-registry-14da/maven-releases</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>
