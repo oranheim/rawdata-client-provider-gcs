@@ -52,7 +52,7 @@
         <dependency>
             <groupId>no.ssb.spi</groupId>
             <artifactId>service-provider-api</artifactId>
-            <version>0.4</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avro</groupId>
@@ -111,7 +111,7 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <release>${java.version}</release>
-                    <encoding>${module.build.sourceEncoding}</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <meminitial>64m</meminitial>
                     <maxmem>512m</maxmem>
                 </configuration>
