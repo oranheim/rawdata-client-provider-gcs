@@ -13,7 +13,6 @@ module no.ssb.rawdata.avro {
     requires google.cloud.core;
     requires com.google.auth.oauth2;
     requires com.google.auth;
-    requires com.google.gson;
 
     provides RawdataClientInitializer with GCSRawdataClientInitializer, FilesystemAvroRawdataClientInitializer;
 }
